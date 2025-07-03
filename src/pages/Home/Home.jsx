@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { Link } from "react-router";
 const Home = () => {
     const categories=['Home','About','Sign In']
     const [isOpen,setIsOpen]=useState(false);
     return (
         <div className="flex flex-col md:flex-row justify-between gap-2 p-5 min-h-screen bg-gradient-to-b from-blue-100 to-blue-300">
 
-            
             <div className="w-full md:w-1/2 bg-white rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none px-10 py-5">
                 <div className="flex justify-between items-center">
                     <img src="/logo.png" alt="Travel Buddy" width={80} height={80} />
                     <div className="relative hidden lg:flex gap-5 text-gray-700 font-medium">
                         {categories.map((category,i)=>(
-                            <h1 key={i} className="cursor-pointer hover:text-blue-600">{category}</h1>
+                            <Link key={i} to={`/${category}`} className={`cursor-pointer hover:text-blue-600 px-4 py-2
+                                ${category==="Sign In"? "text-white bg-blue-600 rounded-full shadow-md hover:bg-blue-700 hover:text-white":""}`}>{category}</Link>
+                            
                         ))}
                     </div>
                     <div className="lg:hidden cursor-pointer z-50" onClick={()=>setIsOpen(!isOpen)}>
@@ -21,9 +23,9 @@ const Home = () => {
                 </div>
 
                 {isOpen && (
-                    <div className=" absolute right-0 top-14 mr-12 z-40 flex flex-col items-center gap-3 text-gray-700 font-medium bg-gray-200 w-fit rounded-3xl p-10 lg:hidden">
+                    <div className=" absolute right-0 top-14 mr-12 z-40 flex flex-col items-center gap-3 text-gray-700 font-medium bg-blue-50 w-fit rounded-3xl p-10 lg:hidden">
                         {categories.map((category,i)=>(
-                            <h1 key={i}>{category}</h1>
+                            <Link key={i} to={`/${category}`} onClick={()=>setIsOpen(false)} >{category}</Link>
                         ))}
                     </div>
                 )}
@@ -53,7 +55,7 @@ const Home = () => {
                 />
 
                 
-                <div className="w-fit flex flex-col justify-end mt-auto md:flex-row gap-6 bg-white/50 p-3 rounded-4xl">
+                <div className="w-fit flex flex-col justify-end mt-auto md:flex-row gap-6 bg-white/50 p-3 rounded-4xl ">
                     
                     <div className="flex-1 bg-white/90 p-5 rounded-4xl text-black shadow-md">
                         <div className="flex items-center gap-3 mb-2">
