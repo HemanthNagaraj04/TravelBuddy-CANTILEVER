@@ -2,6 +2,12 @@
 
 Travel Buddy is your ultimate travel planning companion, helping users discover destinations, plan trips, and even find travel buddies — all through a beautifully animated and responsive React frontend.
 
+## 📸 Screenshots
+
+| Desktop View | Mobile View |
+|--------------|-------------|
+| ![desktop](./public/ProjectPhotos/TravelBuddyHome.png) | ![mobile](./public/ProjectPhotos/TravelBuddyMobile.png) |
+
 ## 🚀 Features Implemented
 
 ### ✅ Landing Page (Home)
@@ -38,9 +44,5 @@ Travel Buddy is your ultimate travel planning companion, helping users discover 
 - User authentication system
 - Backend integration (Node/Express or Firebase)
 
-## 📸 Screenshots (Optional)
 
-| Desktop View | Mobile View |
-|--------------|-------------|
-| ![desktop](./public/ProjectPhotos/TravelBuddyHome.png) | ![mobile](./public/ProjectPhotos/TravelBuddyMobile.png) |
 
