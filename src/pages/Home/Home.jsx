@@ -1,14 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router";
-import TripPlaner from "../TripPlaner/TripPlaner";
-import Autocomplete from 'react-google-autocomplete';
 
 const Home = () => {
     const categories = ['Home', 'About', 'Sign In'];
     const [isOpen, setIsOpen] = useState(false);
-    const apiKey = import.meta.env.VITE_GMAPS_API;
-    console.log("hi");
     return (
         <div className="flex flex-col md:flex-row justify-between gap-2 p-5 min-h-screen bg-gradient-to-b from-blue-100 to-blue-300">
 
