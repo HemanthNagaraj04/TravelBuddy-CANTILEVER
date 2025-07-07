@@ -1,17 +1,25 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Home from './pages/Home/Home'
 import About from './pages/About/About'
+import TripPlaner from './pages/TripPlaner/TripPlaner'
 
 const App = () => {
   const router=createBrowserRouter([
-    {path:'/',
+    {
+      path:'/',
       element:<Home />
     },
-    {path:'/Home',
+    {
+      path:'/Home',
       element:<Home />
     },
-    {path:'/About',
+    {
+      path:'/About',
       element:<About />
+    },
+    {
+      path:'/TripPlaner',
+      element:<TripPlaner />
     }
   ])
   return (

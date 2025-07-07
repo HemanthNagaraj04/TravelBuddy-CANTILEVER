@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router";
+import TripPlaner from "../TripPlaner/TripPlaner";
+import Autocomplete from 'react-google-autocomplete';
 
 const Home = () => {
     const categories = ['Home', 'About', 'Sign In'];
     const [isOpen, setIsOpen] = useState(false);
-
+    const apiKey = import.meta.env.VITE_GMAPS_API;
+    console.log("hi");
     return (
         <div className="flex flex-col md:flex-row justify-between gap-2 p-5 min-h-screen bg-gradient-to-b from-blue-100 to-blue-300">
 
@@ -52,11 +55,14 @@ const Home = () => {
                             <h2 className="font-semibold text-start">Plan a trip</h2>
                             <span className="text-3xl">🏝️🍹</span>
                         </div>
-                        <p className="text-sm text-start">Plan an amazing trip with your loved ones</p>
+                        <p className="text-sm text-start">Plan an amazing trip with your loved ones using AI to get the most out of it</p>
                         <div className="flex justify-center">
-                            <button className="mt-3 bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer">
-                                Plan a trip
-                            </button>
+                            <Link to={'/TripPlaner'}>
+                                <button className="mt-3 bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer"
+                                >
+                                    Plan a trip with AI
+                                </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -84,6 +90,8 @@ const Home = () => {
                     placeholder="Find your destination"
                     className="w-full md:w-2/3 p-3 border-2 border-white rounded-full text-white shadow-2xl placeholder:text-white bg-white/30 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200"
                 />
+
+                
 
                 <div className="w-full flex flex-col md:flex-row gap-6 mt-auto bg-white/50 p-4 rounded-4xl backdrop-blur-md">
 
