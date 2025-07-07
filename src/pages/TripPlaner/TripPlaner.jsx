@@ -1,7 +1,46 @@
 import { Link } from "react-router";
 import { TravelOptions, BudgetOptions } from "./options.jsx"
+import { useEffect, useState } from "react";
 
 const TripPlaner = () => {
+
+  const [formData, setFormData] = useState([]);
+  const [place, setPlace] = useState("");
+  const handleInput = (name, value) => {
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+  }
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData])
+
+  const onGenerateTrip = () => {
+  const { Location, noOfDays, noOfPeople, budget } = formData;
+
+  if (!Location) {
+    console.log("Please enter a location.");
+    return;
+  }
+  if (!noOfDays || noOfDays > 12) {
+    console.log("Please enter a valid number of days (max 12).");
+    return;
+  }
+  if (!noOfPeople) {
+    console.log("Please select the number of people.");
+    return;
+  }
+
+  if (!budget) {
+    console.log("Please select a budget.");
+    return;
+  }
+  console.log("Generating trip with data:", formData);
+};
+
+
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-300">
 
@@ -21,39 +60,45 @@ const TripPlaner = () => {
         <div className="bg-white rounded-b-4xl min-h-screen p-10 md:px-20 lg:px-40 xl:px-80">
 
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800">Effortless Travel Planning Starts Now 🌍</h2>
+            <h2 className="text-3xl font-bold text-gray-800">Effortless Travel Planning Starts Now 🌍🛫</h2>
             <p className="text-gray-600 mt-2 text-lg">Answer a few quick questions and let AI handle the rest.</p>
           </div>
 
 
           <div className="mb-10">
-            <h3 className="text-xl font-semibold text-gray-800">Where would you like to go? 📍 </h3>
+            <h3 className="text-xl font-semibold text-gray-800">Where would you like to go? <span className="text-2xl">📍</span></h3>
             <p className="text-gray-600 mt-1 ">City, region, or hidden gem — you name it!</p>
             <input
               type="text"
+              value={place}
               placeholder="e.g. Kyoto, Japan"
-              className="w-full mt-3 p-2 border border-gray-300 rounded-xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="w-full mt-3 p-2 border border-gray-300 rounded-xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              onChange={(e) => { setPlace(e.target.value); handleInput('Location', e.target.value) }}
             />
           </div>
 
 
           <div className="mb-10">
-            <h3 className="text-xl font-semibold text-gray-800">How many days are you planning to travel? ⏳</h3>
+            <h3 className="text-xl font-semibold text-gray-800">How many days are you planning to travel? <span className="text-2xl">⏳</span></h3>
             <p className="text-gray-600 mt-1 ">We'll tailor your itinerary accordingly.</p>
             <input
               type="number"
               placeholder="e.g. 7"
-              className="w-full mt-3 p-2 border border-gray-300 rounded-xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+              onChange={(e) => handleInput("noOfDays", e.target.value)}
+              className="w-full mt-3 p-2 border border-gray-300 rounded-xl text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
 
           <div className="mb-10">
-            <h3 className="text-xl font-semibold text-gray-800">Choose Your Travel Vibe 🧳</h3>
+            <h3 className="text-xl font-semibold text-gray-800">Choose Your Travel Vibe <span className="text-2xl">🧳</span></h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 mt-4">
               {TravelOptions.map((options, index) => (
                 <div key={index}
-                  className="p-5 border border-black/30 rounded-3xl shadow cursor-pointer hover:shadow-2xl hover:scale-102">
+                  onClick={() => handleInput("noOfPeople", options.people)}
+                  className={`p-5 border rounded-3xl shadow cursor-pointer hover:shadow-2xl hover:scale-102
+                  ${formData.noOfPeople == options.people ? "border-blue-400 border-2 shadow-blue-400" : "border-black/20"}
+                  `}>
                   <h2 className="text-3xl">{options.icon}</h2>
                   <h2 className="font-medium text-lg">{options.title}</h2>
                   <h2 className="font-light">{options.desc}</h2>
@@ -64,11 +109,14 @@ const TripPlaner = () => {
 
 
           <div className="mb-10">
-            <h3 className="text-xl font-semibold text-gray-800">Choose Your Travel Vibe 🧳</h3>
+            <h3 className="text-xl font-semibold text-gray-800">Choose Your Travel Budget <span className="text-2xl">💵</span></h3>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 mt-4">
               {BudgetOptions.map((options, index) => (
                 <div key={index}
-                  className="p-5 border border-black/30 rounded-3xl shadow cursor-pointer hover:shadow-2xl hover:scale-102">
+                  onClick={() => handleInput("budget", options.title)}
+                  className={`p-5 border rounded-3xl shadow cursor-pointer hover:shadow-2xl hover:scale-102
+                  ${formData.budget == options.title ? "border-2 border-blue-400 shadow-blue-400" : "border-black/20"}
+                  `}>
                   <h2 className="text-3xl">{options.icon}</h2>
                   <h2 className="font-medium text-lg">{options.title}</h2>
                   <h2 className="font-light">{options.desc}</h2>
@@ -77,8 +125,9 @@ const TripPlaner = () => {
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-center md:justify-end">
             <button className="bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer"
+            onClick={onGenerateTrip}
             >
               Generate Trip
             </button>

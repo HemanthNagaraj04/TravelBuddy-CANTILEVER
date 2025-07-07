@@ -25,7 +25,7 @@ export const TravelOptions = [
     id: 4,
     title: "Friends",
     icon: "🎉",
-    people: '3+',
+    people: '4+',
     desc: "Adventures are better with friends!"
   },
 ];
