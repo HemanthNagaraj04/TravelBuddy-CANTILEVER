@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import Home from './pages/Home/Home'
 import About from './pages/About/About'
 import TripPlaner from './pages/TripPlaner/TripPlaner'
+import { ToastContainer } from 'react-toastify'
 
 const App = () => {
   const router=createBrowserRouter([
@@ -25,6 +26,7 @@ const App = () => {
   return (
     <div>
       <RouterProvider router={router} />
+      <ToastContainer />
     </div>
   )
 }

@@ -1,6 +1,8 @@
 import { Link } from "react-router";
-import { TravelOptions, BudgetOptions } from "./options.jsx"
+import { TravelOptions, BudgetOptions, AI_Prompt } from "./options.jsx"
 import { useEffect, useState } from "react";
+import { Slide, toast } from "react-toastify";
+import { generateItinerary } from "../../../service/AIModel.jsx";
 
 const TripPlaner = () => {
 
@@ -17,28 +19,42 @@ const TripPlaner = () => {
     console.log(formData);
   }, [formData])
 
-  const onGenerateTrip = () => {
-  const { Location, noOfDays, noOfPeople, budget } = formData;
 
-  if (!Location) {
-    console.log("Please enter a location.");
-    return;
-  }
-  if (!noOfDays || noOfDays > 12) {
-    console.log("Please enter a valid number of days (max 12).");
-    return;
-  }
-  if (!noOfPeople) {
-    console.log("Please select the number of people.");
-    return;
-  }
 
-  if (!budget) {
-    console.log("Please select a budget.");
-    return;
-  }
-  console.log("Generating trip with data:", formData);
-};
+  const onGenerateTrip = async() => {
+    const { Location, noOfDays, noOfPeople, budget } = formData;
+
+    if (!Location) {
+      toast.warn("Enter Location", { transition: Slide, autoClose: 2000, closeOnClick: true });
+      return;
+    }
+    if (!noOfDays || noOfDays > 12) {
+      toast.warn("Please enter a valid number of days (max 12).", { transition: Slide, autoClose: 2000, closeOnClick: true });
+      return;
+    }
+    if (!noOfPeople) {
+      toast.warn("Please select the number of people.", { transition: Slide, autoClose: 2000, closeOnClick: true });
+      return;
+    }
+
+    if (!budget) {
+      toast.warn("Please select a budget.", { transition: Slide, autoClose: 2000, closeOnClick: true });
+      return;
+    }
+    console.log("Generating trip with data:", formData);
+
+    try{
+      const generatedData=await generateItinerary(formData);
+      if(generatedData){
+        console.log(generatedData);
+      }
+      else{
+        console.log("try error");
+      }
+    }catch (error){
+        console.error("Error during trip generation:", error);
+      }
+  };
 
 
   return (
@@ -127,7 +143,7 @@ const TripPlaner = () => {
 
           <div className="flex justify-center md:justify-end">
             <button className="bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer"
-            onClick={onGenerateTrip}
+              onClick={onGenerateTrip}
             >
               Generate Trip
             </button>
