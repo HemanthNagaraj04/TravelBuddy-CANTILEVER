@@ -2,10 +2,11 @@ import { TbLockPassword } from "react-icons/tb";
 import { FaRegUser, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { GoMail } from "react-icons/go";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const SignIn = () => {
-
-  const [action, setAction] = useState("Log In");
+  const navigate=useNavigate();
+  const [action, setAction] = useState("Sign In");
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState([]);
 
@@ -16,11 +17,54 @@ const SignIn = () => {
     })
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data: ", form);
+  const handleSignIn = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await fetch('http://localhost:5000/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
 
-  };
+    const data = await res.json();
+
+    if (res.ok) {
+      alert('Signup successful');
+      setAction('Log In');
+    } else {
+      alert(data.message || 'Signup failed');
+    }
+
+  } catch (err) {
+    console.error("Signup error:", err);
+    alert("Something went wrong");
+  }
+};
+
+
+  const handleLogIn = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
+
+    const data = await res.json();
+    if (res.ok && data.token) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify({ email: form.email }));
+      alert("Login successful!");
+      navigate('/Home');
+    } else {
+      alert(data.message || "Login failed");
+    }
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+};
+
   useEffect(() => {
     console.log(form);
   }, [form]);
@@ -42,7 +86,7 @@ const SignIn = () => {
             <span className="w-10 h-1 bg-blue-900 mt-3 rounded-3xl"></span>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={action === 'Sign In' ? handleSignIn : handleLogIn}>
             {action === "Sign In" && (<div className="mb-4 flex items-center gap-3">
               <FaRegUser size={20} />
               <input
