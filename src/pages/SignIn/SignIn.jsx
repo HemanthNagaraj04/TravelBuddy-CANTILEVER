@@ -4,7 +4,7 @@ import { GoMail } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const SignIn = () => {
+const SignIn = ({setIsLoggedIn}) => {
   const navigate=useNavigate();
   const [action, setAction] = useState("Sign In");
   const [showPassword, setShowPassword] = useState(false);
@@ -56,7 +56,9 @@ const SignIn = () => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify({ email: form.email }));
       alert("Login successful!");
+      setIsLoggedIn(true);
       navigate('/Home');
+
     } else {
       alert(data.message || "Login failed");
     }

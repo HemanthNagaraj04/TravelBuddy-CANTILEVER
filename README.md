@@ -7,6 +7,7 @@ Travel Buddy is your ultimate travel planning companion, helping users discover 
 | Desktop View | Mobile View |
 |--------------|-------------|
 | ![desktop](./public/ProjectPhotos/TravelBuddyHome.png) | ![mobile](./public/ProjectPhotos/TravelBuddyMobile.png) |
+| ![desktop](./public/ProjectPhotos/signIn-Laptop.png) | ![mobile](./public/ProjectPhotos/signIn-Phone.png) |
 
 ## 🚀 Features Implemented
 

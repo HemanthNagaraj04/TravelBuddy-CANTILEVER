@@ -4,8 +4,10 @@ import About from './pages/About/About'
 import TripPlaner from './pages/TripPlaner/TripPlaner'
 import { ToastContainer } from 'react-toastify'
 import SignIn from './pages/SignIn/SignIn'
+import { useState } from 'react'
 
 const App = () => {
+  const[isLoggedIn,setIsLoggedIn]=useState(false);
   const router=createBrowserRouter([
     {
       path:'/',
@@ -13,7 +15,7 @@ const App = () => {
     },
     {
       path:'/Home',
-      element:<Home />
+      element:<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
     },
     {
       path:'/About',
@@ -21,10 +23,10 @@ const App = () => {
     },
     {
       path:'/TripPlaner',
-      element:<TripPlaner />
+      element:<TripPlaner isLoggedIn={isLoggedIn}/>
     },{
-      path:'/Sign In',
-      element:<SignIn />
+      path:'/signin',
+      element:<SignIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
     }
   ])
   return (

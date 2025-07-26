@@ -1,10 +1,20 @@
 import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
-const Home = () => {
-    const categories = ['Home', 'About', 'Sign In'];
+const Home = ({ isLoggedIn, setIsLoggedIn }) => {
+    const navigate = useNavigate();
+    const categories = ['Home', 'About'];
     const [isOpen, setIsOpen] = useState(false);
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setIsLoggedIn(false);
+        navigate("/");
+    }
+    const handlePlanTrip = () => {
+        { isLoggedIn ? navigate('/TripPlaner') : navigate('/SignIn') }
+    }
     return (
         <div className="flex flex-col md:flex-row justify-between gap-2 p-5 min-h-screen bg-gradient-to-b from-blue-100 to-blue-300">
 
@@ -12,13 +22,34 @@ const Home = () => {
 
                 <div className="flex justify-between items-center">
                     <img src="/logo.png" alt="Travel Buddy" width={80} height={80} />
-                    <div className="relative hidden lg:flex gap-5 text-gray-700 font-medium">
-                        {categories.map((category, i) => (
-                            <Link key={i} to={`/${category}`} className={`cursor-pointer hover:text-blue-600 px-4 py-2
-                                ${category === "Sign In" ? "text-white bg-blue-600 rounded-full shadow-md hover:bg-blue-700 hover:text-white" : ""}`}>
-                                {category}
+                    <div className="relative hidden lg:flex items-center gap-5 text-gray-700 font-medium">
+
+                        {!isLoggedIn ?
+                            categories.map((category, i) => (
+                                <Link key={i} to={category === "Home" ? '/' : '/About'} className={`cursor-pointer hover:text-blue-600 px-4 py-2`}>
+                                    {category}
+                                </Link>
+                            ))
+                            :
+                            categories.map((category, i) => (
+                                <Link key={i} to={`/${category}`} className={`cursor-pointer hover:text-blue-600 px-4 py-2}`}>
+                                    {category}
+                                </Link>
+                            ))
+                        }
+                        {!isLoggedIn ?
+                            <Link to={'/SignIn'}>
+                                <button
+                                    className="text-white bg-blue-600 rounded-full shadow-md hover:bg-blue-700 hover:text-white px-4 py-2 cursor-pointer">
+                                    Sign In
+                                </button>
                             </Link>
-                        ))}
+                            :
+                            <button onClick={handleLogout}
+                                className="text-white bg-red-500 rounded-full shadow-md hover:bg-red-600 px-4 py-2 cursor-pointer">
+                                Log out
+                            </button>
+                        }
                     </div>
                     <div className="lg:hidden cursor-pointer z-50" onClick={() => setIsOpen(!isOpen)}>
                         {isOpen ? (<span className="text-3xl text-red-500">&times;</span>) : <RxHamburgerMenu size={26} />}
@@ -27,9 +58,32 @@ const Home = () => {
 
                 {isOpen && (
                     <div className="absolute right-0 top-14 mr-12 z-40 flex flex-col items-center gap-3 text-gray-700 font-medium bg-blue-50 w-fit rounded-3xl p-10 lg:hidden">
-                        {categories.map((category, i) => (
-                            <Link key={i} to={`/${category}`} onClick={() => setIsOpen(false)}>{category}</Link>
-                        ))}
+                        {!isLoggedIn ?
+                            categories.map((category, i) => (
+                                <Link key={i} to={category === "Home" ? '/' : '/About'} className={`cursor-pointer hover:text-blue-600 px-4 py-2}`}>
+                                    {category}
+                                </Link>
+                            ))
+                            :
+                            categories.map((category, i) => (
+                                <Link key={i} to={`/${category}`} className={`cursor-pointer hover:text-blue-600 px-4 py-2}`}>
+                                    {category}
+                                </Link>
+                            ))
+                        }
+                        {!isLoggedIn ?
+                            <Link to={'/SignIn'}>
+                                <button
+                                    className="text-white bg-blue-600 rounded-full shadow-md hover:bg-blue-700 hover:text-white px-4 py-2 cursor-pointer">
+                                    Sign In
+                                </button>
+                            </Link>
+                            :
+                            <button onClick={handleLogout}
+                                className="text-white bg-red-500 rounded-full shadow-md hover:bg-red-600 px-4 py-2 cursor-pointer">
+                                Log out
+                            </button>
+                        }
                     </div>
                 )}
 
@@ -53,12 +107,13 @@ const Home = () => {
                         </div>
                         <p className="text-sm text-start">Plan an amazing trip with your loved ones using AI to get the most out of it</p>
                         <div className="flex justify-center">
-                            <Link to={'/TripPlaner'}>
-                                <button className="mt-3 bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer"
-                                >
-                                    Plan a trip with AI
-                                </button>
-                            </Link>
+
+                            <button onClick={handlePlanTrip}
+                                className="mt-3 bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer"
+                            >
+                                Plan a trip with AI
+                            </button>
+
                         </div>
                     </div>
 
@@ -87,7 +142,7 @@ const Home = () => {
                     className="w-full md:w-2/3 p-3 border-2 border-white rounded-full text-white shadow-2xl placeholder:text-white bg-white/30 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200"
                 />
 
-                
+
 
                 <div className="w-full flex flex-col md:flex-row gap-6 mt-auto bg-white/50 p-4 rounded-4xl backdrop-blur-md">
 
@@ -118,7 +173,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
