@@ -3,6 +3,7 @@ import Home from './pages/Home/Home'
 import About from './pages/About/About'
 import TripPlaner from './pages/TripPlaner/TripPlaner'
 import { ToastContainer } from 'react-toastify'
+import SignIn from './pages/SignIn/SignIn'
 
 const App = () => {
   const router=createBrowserRouter([
@@ -21,6 +22,9 @@ const App = () => {
     {
       path:'/TripPlaner',
       element:<TripPlaner />
+    },{
+      path:'/Sign In',
+      element:<SignIn />
     }
   ])
   return (
