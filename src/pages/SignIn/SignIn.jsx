@@ -4,8 +4,8 @@ import { GoMail } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const SignIn = ({setIsLoggedIn}) => {
-  const navigate=useNavigate();
+const SignIn = ({ setIsLoggedIn }) => {
+  const navigate = useNavigate();
   const [action, setAction] = useState("Sign In");
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState([]);
@@ -18,54 +18,56 @@ const SignIn = ({setIsLoggedIn}) => {
   };
 
   const handleSignIn = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await fetch('http://localhost:5000/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    });
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      alert('Signup successful');
-      setAction('Log In');
-    } else {
-      alert(data.message || 'Signup failed');
+      if (res.ok) {
+        alert('Signup successful');
+        setAction('Log In');
+      } else {
+        alert(data.message || 'Signup failed');
+      }
+
+    } catch (err) {
+      console.error("Signup error:", err);
+      alert("Something went wrong");
     }
-
-  } catch (err) {
-    console.error("Signup error:", err);
-    alert("Something went wrong");
-  }
-};
+  };
 
 
   const handleLogIn = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await fetch('http://localhost:5000/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
 
-    const data = await res.json();
-    if (res.ok && data.token) {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify({ email: form.email }));
-      alert("Login successful!");
-      setIsLoggedIn(true);
-      navigate('/Home');
+      const data = await res.json();
+      if (res.ok && data.token) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        alert("Login successful!");
+        setIsLoggedIn(true);
+        navigate('/Home');
+        const user = JSON.parse(localStorage.getItem('user'));
+        console.log(user.username);
 
-    } else {
-      alert(data.message || "Login failed");
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (err) {
+      alert("Error: " + err.message);
     }
-  } catch (err) {
-    alert("Error: " + err.message);
-  }
-};
+  };
 
   useEffect(() => {
     console.log(form);

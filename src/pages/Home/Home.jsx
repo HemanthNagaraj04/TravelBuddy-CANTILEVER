@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link, useNavigate } from "react-router";
+import Profile from "../SignIn/profile";
 
 const Home = ({ isLoggedIn, setIsLoggedIn }) => {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Home = ({ isLoggedIn, setIsLoggedIn }) => {
     const handlePlanTrip = () => {
         { isLoggedIn ? navigate('/TripPlaner') : navigate('/SignIn') }
     }
+
     return (
         <div className="flex flex-col md:flex-row justify-between gap-2 p-5 min-h-screen bg-gradient-to-b from-blue-100 to-blue-300">
 
@@ -24,19 +26,22 @@ const Home = ({ isLoggedIn, setIsLoggedIn }) => {
                     <img src="/logo.png" alt="Travel Buddy" width={80} height={80} />
                     <div className="relative hidden lg:flex items-center gap-5 text-gray-700 font-medium">
 
-                        {!isLoggedIn ?
+                        {!isLoggedIn ? (
                             categories.map((category, i) => (
-                                <Link key={i} to={category === "Home" ? '/' : '/About'} className={`cursor-pointer hover:text-blue-600 px-4 py-2`}>
+                                <Link
+                                    key={i}
+                                    to={category === "Home" ? "/" : "/About"}
+                                    className="cursor-pointer hover:text-blue-600 px-4 py-2"
+                                >
                                     {category}
                                 </Link>
                             ))
-                            :
-                            categories.map((category, i) => (
-                                <Link key={i} to={`/${category}`} className={`cursor-pointer hover:text-blue-600 px-4 py-2}`}>
-                                    {category}
-                                </Link>
-                            ))
-                        }
+                        ) : (
+                            <div>
+                                <Profile />
+                            </div>
+                        )}
+
                         {!isLoggedIn ?
                             <Link to={'/SignIn'}>
                                 <button

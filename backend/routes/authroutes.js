@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
-const mongoose=require('mongoose');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -33,9 +32,9 @@ router.post('/signup', async (req, res) => {
 
 
 
-router.post('/login',async(req, res)=>{
-    const {email,password}=req.body;
-try {
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: 'User not found' });
 
@@ -43,10 +42,16 @@ try {
     if (!isMatch) return res.status(400).json({ message: 'Invalid password' });
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    res.json({
+      token,
+      user: {
+        email: user.email,
+        username: user.username
+      }
+    });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
-module.exports=router;
+module.exports = router;
