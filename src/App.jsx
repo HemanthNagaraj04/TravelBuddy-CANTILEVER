@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import SignIn from './pages/SignIn/SignIn'
 import { useState } from 'react'
 import FindBuddy from './pages/FindBuddy/FindBuddy'
+import ProtectedRoutes from './pages/Home/ProtectedRoutes'
 
 const App = () => {
   const[isLoggedIn,setIsLoggedIn]=useState(false);
@@ -24,13 +25,13 @@ const App = () => {
     },
     {
       path:'/TripPlaner',
-      element:<TripPlaner isLoggedIn={isLoggedIn}/>
+      element:<ProtectedRoutes isLoggedIn={isLoggedIn}> <TripPlaner isLoggedIn={isLoggedIn}/> </ProtectedRoutes>
     },{
       path:'/signin',
       element:<SignIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
     },{
       path:'/findabuddy',
-      element:<FindBuddy />
+      element:<ProtectedRoutes isLoggedIn={isLoggedIn}> <FindBuddy /></ProtectedRoutes>
     }
   ])
   return (
