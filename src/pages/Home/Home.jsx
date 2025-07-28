@@ -16,6 +16,9 @@ const Home = ({ isLoggedIn, setIsLoggedIn }) => {
     const handlePlanTrip = () => {
         { isLoggedIn ? navigate('/TripPlaner') : navigate('/SignIn') }
     }
+    const handleFindBuddy =()=>{
+        { isLoggedIn ? navigate('/findabuddy') : navigate('/SignIn') }
+    }
 
     return (
         <div className="flex flex-col md:flex-row justify-between gap-2 p-5 min-h-screen bg-gradient-to-b from-blue-100 to-blue-300">
@@ -129,7 +132,8 @@ const Home = ({ isLoggedIn, setIsLoggedIn }) => {
                         </div>
                         <p className="text-sm text-start">Join a buddy who's going to the same location</p>
                         <div className="flex justify-center">
-                            <button className="mt-3 bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer">
+                            <button onClick={handleFindBuddy}
+                            className="mt-3 bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer">
                                 Find a Buddy
                             </button>
                         </div>

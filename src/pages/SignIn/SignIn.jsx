@@ -3,6 +3,7 @@ import { FaRegUser, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { GoMail } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const SignIn = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -29,15 +30,16 @@ const SignIn = ({ setIsLoggedIn }) => {
       const data = await res.json();
 
       if (res.ok) {
-        alert('Signup successful');
         setAction('Log In');
+        toast.success('Signup successful');
       } else {
-        alert(data.message || 'Signup failed');
+        toast.error('Signup failed');
+        console.log(data.message);
       }
 
     } catch (err) {
       console.error("Signup error:", err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 
@@ -55,17 +57,19 @@ const SignIn = ({ setIsLoggedIn }) => {
       if (res.ok && data.token) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        alert("Login successful!");
         setIsLoggedIn(true);
         navigate('/Home');
         const user = JSON.parse(localStorage.getItem('user'));
+        toast.success(`Welcome back ${user.username}`,{autoClose:2000,position:"top-center"});
         console.log(user.username);
 
       } else {
-        alert(data.message || "Login failed");
+        toast.error("Login failed");
+        console.log(data.message);
       }
     } catch (err) {
-      alert("Error: " + err.message);
+      toast.error("Error, Please try after some time ");
+      console.log("Error: "+err.message);
     }
   };
 

@@ -5,6 +5,7 @@ import TripPlaner from './pages/TripPlaner/TripPlaner'
 import { ToastContainer } from 'react-toastify'
 import SignIn from './pages/SignIn/SignIn'
 import { useState } from 'react'
+import FindBuddy from './pages/FindBuddy/FindBuddy'
 
 const App = () => {
   const[isLoggedIn,setIsLoggedIn]=useState(false);
@@ -27,6 +28,9 @@ const App = () => {
     },{
       path:'/signin',
       element:<SignIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+    },{
+      path:'/findabuddy',
+      element:<FindBuddy />
     }
   ])
   return (
