@@ -7,37 +7,40 @@ import SignIn from './pages/SignIn/SignIn'
 import { useState } from 'react'
 import FindBuddy from './pages/FindBuddy/FindBuddy'
 import ProtectedRoutes from './pages/Home/ProtectedRoutes'
+import { UserProvider } from './context/UserContext'
 
 const App = () => {
-  const[isLoggedIn,setIsLoggedIn]=useState(false);
-  const router=createBrowserRouter([
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = createBrowserRouter([
     {
-      path:'/',
-      element:<Home />
+      path: '/',
+      element: <Home />
     },
     {
-      path:'/Home',
-      element:<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+      path: '/Home',
+      element: <Home/>
     },
     {
-      path:'/About',
-      element:<About />
+      path: '/About',
+      element: <About />
     },
     {
-      path:'/TripPlaner',
-      element:<ProtectedRoutes isLoggedIn={isLoggedIn}> <TripPlaner isLoggedIn={isLoggedIn}/> </ProtectedRoutes>
-    },{
-      path:'/signin',
-      element:<SignIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
-    },{
-      path:'/findabuddy',
-      element:<ProtectedRoutes isLoggedIn={isLoggedIn}> <FindBuddy /></ProtectedRoutes>
+      path: '/TripPlaner',
+      element: <ProtectedRoutes> <TripPlaner /> </ProtectedRoutes>
+    }, {
+      path: '/signin',
+      element: <SignIn />
+    }, {
+      path: '/findabuddy',
+      element: <ProtectedRoutes> <FindBuddy /></ProtectedRoutes>
     }
   ])
   return (
     <div>
-      <RouterProvider router={router} />
-      <ToastContainer />
+      <UserProvider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </UserProvider>
     </div>
   )
 }

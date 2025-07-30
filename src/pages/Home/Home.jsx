@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link, useNavigate } from "react-router";
 import Profile from "../SignIn/profile";
+import { UserContext } from "../../context/UserContext";
 
-const Home = ({ isLoggedIn, setIsLoggedIn }) => {
+const Home = () => {
+    const {isLoggedIn,setIsLoggedIn}=useContext(UserContext);
     const navigate = useNavigate();
     const categories = ['Home', 'About'];
     const [isOpen, setIsOpen] = useState(false);

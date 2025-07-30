@@ -5,7 +5,7 @@ import { Slide, toast } from "react-toastify";
 import { generateItinerary } from "../../../service/AIModel.jsx";
 
 
-const TripPlaner = ({isLoggedIn}) => {
+const TripPlaner = () => {
   const navigate=useNavigate();
   const [formData, setFormData] = useState([]);
   const [place, setPlace] = useState("");

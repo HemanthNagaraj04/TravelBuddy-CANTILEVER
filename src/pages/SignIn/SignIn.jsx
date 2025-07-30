@@ -1,11 +1,13 @@
 import { TbLockPassword } from "react-icons/tb";
 import { FaRegUser, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { GoMail } from "react-icons/go";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { UserContext } from "../../context/UserContext";
 
-const SignIn = ({ setIsLoggedIn }) => {
+const SignIn = () => {
+  const {setIsLoggedIn}=useContext(UserContext);
   const navigate = useNavigate();
   const [action, setAction] = useState("Sign In");
   const [showPassword, setShowPassword] = useState(false);
