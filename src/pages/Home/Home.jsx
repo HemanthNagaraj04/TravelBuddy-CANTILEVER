@@ -16,10 +16,10 @@ const Home = () => {
         navigate("/");
     }
     const handlePlanTrip = () => {
-        { isLoggedIn ? navigate('/TripPlaner') : navigate('/SignIn') }
+         isLoggedIn ? navigate('/tripplaner') : navigate('/SignIn') 
     }
     const handleFindBuddy =()=>{
-        { isLoggedIn ? navigate('/findabuddy') : navigate('/SignIn') }
+         isLoggedIn ? navigate('/findabuddy') : navigate('/SignIn') 
     }
 
     return (

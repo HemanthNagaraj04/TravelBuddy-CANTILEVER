@@ -1,11 +1,9 @@
-import React from 'react'
-
 const FindBuddy = () => {
   return (
-    <div>
-      FindBuddy
+    <div style={{ fontSize: '2rem', color: 'blue', padding: '2rem' }}>
+      ✅ Find a Buddy is rendering
     </div>
-  )
-}
+  );
+};
 
-export default FindBuddy
+export default FindBuddy;
