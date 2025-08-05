@@ -4,7 +4,9 @@ import { UserContext } from '../../context/UserContext';
 import Profile from '../SignIn/profile';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { createRoot } from 'react-dom/client';
+import { io } from 'socket.io-client';
 
+const socket = io('http://localhost:5000');
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const PopupContent = ({ username }) => {
@@ -21,7 +23,7 @@ const PopupContent = ({ username }) => {
       <h3 className="text-lg font-medium text-gray-800 mb-3">{username}</h3>
       <button
         onClick={handleChatClick}
-        className="w-full bg-blue-500 hover:bg-blue-600 cursor-pointer text-white text-sm py-2 rounded-lg shadow transition"
+        className="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 rounded-lg shadow transition"
       >
         Chat with {username.split(' ')[0]}
       </button>
@@ -37,6 +39,15 @@ const FindBuddy = () => {
   const [markedDestinations, setMarkedDestinations] = useState([]);
   const [pendingLocation, setPendingLocation] = useState(null);
 
+  useEffect(() => {
+    socket.on('destination-updated', (data) => {
+      setMarkedDestinations(prev => [...prev, data]);
+    });
+
+    return () => {
+      socket.off('destination-updated');
+    };
+  }, []);
 
   const geocodeLocation = async (place) => {
     const response = await fetch(
@@ -59,10 +70,7 @@ const FindBuddy = () => {
     mapRef.current.on('load', () => {
       mapRef.current.addSource('destination-point', {
         type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: [],
-        },
+        data: { type: 'FeatureCollection', features: [] },
       });
 
       mapRef.current.addLayer({
@@ -80,22 +88,16 @@ const FindBuddy = () => {
       mapRef.current.on('click', 'destination-circle', (e) => {
         const { lng, lat } = e.lngLat;
         const { markedBy } = e.features[0].properties;
-
         const popupNode = document.createElement('div');
         popupNode.style.maxWidth = '220px';
-        popupNode.style.zIndex = '9999';
 
         const root = createRoot(popupNode);
-        root.render(
-          <PopupContent username={markedBy || 'Unknown User'} />
-        );
+        root.render(<PopupContent username={markedBy || 'Unknown'} />);
 
-        setTimeout(() => {
-          new mapboxgl.Popup({ offset: 25 })
-            .setLngLat([lng, lat])
-            .setDOMContent(popupNode)
-            .addTo(mapRef.current);
-        }, 0);
+        new mapboxgl.Popup({ offset: 25 })
+          .setLngLat([lng, lat])
+          .setDOMContent(popupNode)
+          .addTo(mapRef.current);
       });
     });
 
@@ -108,15 +110,10 @@ const FindBuddy = () => {
       mapRef.current.isStyleLoaded() &&
       markedDestinations.length > 0
     ) {
-      const geojsonFeatures = markedDestinations.map((dest) => ({
+      const geojsonFeatures = markedDestinations.map(dest => ({
         type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [dest.lng, dest.lat],
-        },
-        properties: {
-          markedBy: dest.markedBy,
-        },
+        geometry: { type: 'Point', coordinates: [dest.lng, dest.lat] },
+        properties: { markedBy: dest.markedBy },
       }));
 
       const newGeojson = {
@@ -125,9 +122,7 @@ const FindBuddy = () => {
       };
 
       const source = mapRef.current.getSource('destination-point');
-      if (source) {
-        source.setData(newGeojson);
-      }
+      if (source) source.setData(newGeojson);
     }
   }, [markedDestinations]);
 
@@ -141,19 +136,17 @@ const FindBuddy = () => {
         const data = await res.json();
         setSearchHistory(data.searchHistory || []);
         setMarkedDestinations(
-          data.searchHistory.map((dest) => ({
+          (data.searchHistory || []).map(dest => ({
             ...dest,
             markedBy: userDetails.username,
-          })) || []
+          }))
         );
       } catch (err) {
         console.error('Error fetching history:', err);
       }
     };
 
-    if (userDetails) {
-      fetchSearchHistory();
-    }
+    if (userDetails) fetchSearchHistory();
   }, [userDetails]);
 
   const handleSubmit = async () => {
@@ -162,7 +155,7 @@ const FindBuddy = () => {
       mapRef.current.flyTo({ center: [lng, lat], zoom: 10 });
       setPendingLocation({ lat, lng, name: destination });
     } catch (err) {
-      console.error('Error:', err.message);
+      console.error('Geocoding failed:', err.message);
       setPendingLocation(null);
     }
   };
@@ -172,14 +165,18 @@ const FindBuddy = () => {
     const { lat, lng, name } = pendingLocation;
 
     try {
-      const newDestination = {
-        name,
+      const newPoint = {
         lat,
         lng,
+        name,
         markedBy: userDetails.username,
       };
-      setMarkedDestinations([newDestination]);
 
+      // Update map + share with others
+      setMarkedDestinations(prev => [...prev, newPoint]);
+      socket.emit('new-destination', newPoint);
+
+      // Save to backend
       const token = localStorage.getItem('token');
       await fetch('http://localhost:5000/api/search/add', {
         method: 'POST',
@@ -187,12 +184,12 @@ const FindBuddy = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newDestination),
+        body: JSON.stringify(newPoint),
       });
 
       setPendingLocation(null);
     } catch (err) {
-      console.error('Error:', err.message);
+      console.error('Error saving location:', err.message);
     }
   };
 
