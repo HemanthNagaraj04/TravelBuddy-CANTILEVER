@@ -5,6 +5,8 @@ import Profile from '../SignIn/profile';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { createRoot } from 'react-dom/client';
 import { io } from 'socket.io-client';
+import Recommended from './Recommended';
+
 
 const socket = io('http://localhost:5000');
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -31,6 +33,8 @@ const PopupContent = ({ username }) => {
   );
 };
 
+
+
 const FindBuddy = () => {
   const [destination, setDestination] = useState('');
   const { userDetails, searchHistory, setSearchHistory } = useContext(UserContext);
@@ -38,7 +42,8 @@ const FindBuddy = () => {
   const mapRef = useRef(null);
   const [markedDestinations, setMarkedDestinations] = useState([]);
   const [pendingLocation, setPendingLocation] = useState(null);
-
+  const [showRecommendations, setShowRecommendations] = useState(true);
+  const [showHistory, setShowHistory] = useState(false);
   useEffect(() => {
     socket.on('destination-updated', (data) => {
       setMarkedDestinations(prev => [...prev, data]);
@@ -149,6 +154,19 @@ const FindBuddy = () => {
     if (userDetails) fetchSearchHistory();
   }, [userDetails]);
 
+  const handleRecommendedClick = async (placeName) => {
+    setDestination(placeName);
+    try {
+      const { lat, lng } = await geocodeLocation(placeName);
+      mapRef.current.flyTo({ center: [lng, lat], zoom: 10 });
+      setPendingLocation({ lat, lng, name: placeName });
+    } catch (err) {
+      console.error('Geocoding failed:', err.message);
+      setPendingLocation(null);
+    }
+  };
+
+
   const handleSubmit = async () => {
     try {
       const { lat, lng } = await geocodeLocation(destination);
@@ -173,7 +191,9 @@ const FindBuddy = () => {
       };
 
       // Update map + share with others
-      setMarkedDestinations(prev => [...prev, newPoint]);
+      setMarkedDestinations(prev =>
+        [newPoint]
+      );
       socket.emit('new-destination', newPoint);
 
       // Save to backend
@@ -218,6 +238,17 @@ const FindBuddy = () => {
           Search Location
         </button>
 
+        {/* <div>
+          <button
+            onClick={() => setShowRecommendations(!showRecommendations)}
+            className="text-sm text-blue-700 underline hover:text-blue-900 transition self-start"
+          >
+            {showRecommendations ? 'Hide Recommendations' : 'Show Recommendations'}
+          </button>
+          
+
+        </div> */}
+
         {pendingLocation && (
           <div className="flex flex-col gap-2 p-3 bg-gray-100 rounded-xl">
             <h3 className="text-sm font-medium">
@@ -241,16 +272,34 @@ const FindBuddy = () => {
         )}
 
         {searchHistory.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-medium text-blue-800">Past Searches</h3>
-            <ul className="text-sm font-light ml-3 text-gray-700">
-              {searchHistory.slice(-5).map((item, idx) => (
-                <li key={item._id || idx}>{item.name}</li>
-              ))}
-            </ul>
-          </div>
+          <>
+            <button
+              onClick={() => setShowHistory(prev => !prev)}
+              className="text-sm text-blue-700 underline hover:text-blue-900 transition self-start"
+            >
+              {showHistory ? 'Hide History' : 'Show History'}
+            </button>
+
+            {showHistory && (
+              <div className="flex flex-col gap-2">
+                <h3 className="text-lg font-medium text-blue-800">Past Searches</h3>
+                <ul className="text-sm font-light ml-3 text-gray-700">
+                  {searchHistory.slice(-5).map((item, idx) => (
+                    <li key={item._id || idx}>{item.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
         )}
       </div>
+      {showRecommendations &&
+        <div className="hidden md:block absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-3xl bg-white/60 backdrop-blur-lg rounded-2xl shadow-xl p-4 z-10">
+          <Recommended onSelectPlace={handleRecommendedClick} />
+        </div>
+      }
+
+
     </div>
   );
 };

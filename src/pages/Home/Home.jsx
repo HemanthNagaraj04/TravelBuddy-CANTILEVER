@@ -171,12 +171,16 @@ const Home = () => {
                             <h3 className="font-semibold">Destination Guidelines</h3>
                         </div>
                         <div className="flex flex-col gap-2 mt-2">
-                            <span className="flex items-center justify-between text-sm cursor-pointer hover:text-blue-600 group">
+                            <span 
+                            onClick={()=>navigate('/findabuddy')}
+                            className="flex items-center justify-between text-sm cursor-pointer hover:text-blue-600 group">
                                 Popular Travel Destination
                                 <span className="text-lg group-hover:translate-x-1 transition-transform">&gt;</span>
                             </span>
                             <span className="w-full bg-black/30 h-[1px]"></span>
-                            <span className="flex items-center justify-between text-sm cursor-pointer hover:text-blue-600 group">
+                            <span 
+                            onClick={()=>navigate('/About')}
+                            className="flex items-center justify-between text-sm cursor-pointer hover:text-blue-600 group">
                                 See Travel Reviews
                                 <span className="text-lg group-hover:translate-x-1 transition-transform">&gt;</span>
                             </span>
