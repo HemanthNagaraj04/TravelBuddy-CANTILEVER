@@ -1,6 +1,29 @@
 # 🌍 Travel Buddy
 
-Travel Buddy is your ultimate travel planning companion, helping users discover destinations, plan trips, and even find travel buddies — all through a beautifully animated and responsive React frontend.
+**Travel Buddy** is a full-stack travel application designed to make trip planning seamless and social. Users can generate AI-based itineraries, find like-minded travel partners, share their destinations in real-time, and explore curated travel experiences.
+
+---
+
+## ✨ Features
+
+- 🔒 Secure User Authentication (JWT + bcrypt)
+- 📍 Real-time destination sharing using **Socket.IO** and **Mapbox**
+- 🤖 AI-powered trip planning (future integration scope)
+- 🧳 View past search history and re-plan trips easily
+- 👥 Connect with other travelers through shared destinations
+- 💡 Interactive and responsive design with smooth animations
+- 🎯 Built with **React**, **Express**, **MongoDB**, **Tailwind CSS**, and **Mapbox**
+
+---
+
+## 🛠️ Tech Stack
+
+| Frontend | Backend | Real-time | Styling |
+|----------|---------|-----------|---------|
+| React, Vite | Node.js, Express | Socket.IO | Tailwind CSS |
+| Context API | MongoDB | Mapbox GL JS |  | 
+
+---
 
 ## 📸 Screenshots
 
@@ -8,42 +31,6 @@ Travel Buddy is your ultimate travel planning companion, helping users discover 
 |--------------|-------------|
 | ![desktop](./public/ProjectPhotos/TravelBuddyHome.png) | ![mobile](./public/ProjectPhotos/TravelBuddyMobile.png) |
 | ![desktop](./public/ProjectPhotos/signIn-Laptop.png) | ![mobile](./public/ProjectPhotos/signIn-phone.png) |
+| ![desktop](./public/ProjectPhotos/findBuddy-laptop.png) | ![mobile](./public/ProjectPhotos/findBuddy-phone.png) |
 
-## 🚀 Features Implemented
-
-### ✅ Landing Page (Home)
-- Responsive layout using **Tailwind CSS**
-- Split screen with:
-  - 📄 Left section: Tagline, introduction, and CTA cards (`Plan a Trip` & `Find a Buddy`)
-  - 🖼️ Right section: Background image with a search bar and travel tips
-- Mobile navigation menu using **hamburger toggle**
-- Cards with gradients, shadows, and animated hover effects
-- Google Maps Autocomplete setup (deprecated, moving to manual input-based search)
-- Routing integrated using **React Router DOM**
-
-### 🧭 Navigation
-- `Home`, `About`, and `Sign In` routes
-- Hamburger menu for smaller screens
-- Button links to `/TripPlaner` and other pages (future-ready)
-
-## 🧩 Stack
-
-- ⚛️ **React**
-- 🎨 **Tailwind CSS**
-- 🔄 **React Router DOM**
-- 🗺️ Google Maps API (Search planned, Autocomplete deprecated)
-- 🧠 AI Trip Planning (planned)
-- 🔍 Place Search (planned using Google Places or alternative)
-
-## 🧪 In Progress / Coming Soon
-
-- AI-powered itinerary planning page (`/TripPlaner`)
-- Google Places API integration for:
-  - Location-based search
-  - Hotels, restaurants, and activities
-- Trip buddy matching system
-- User authentication system
-- Backend integration (Node/Express or Firebase)
-
-
-
+---

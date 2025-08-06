@@ -5,7 +5,7 @@ import Profile from "../SignIn/profile";
 import { UserContext } from "../../context/UserContext";
 
 const Home = () => {
-    const {isLoggedIn,setIsLoggedIn}=useContext(UserContext);
+    const { isLoggedIn, setIsLoggedIn, destination, setDestination } = useContext(UserContext);
     const navigate = useNavigate();
     const categories = ['Home', 'About'];
     const [isOpen, setIsOpen] = useState(false);
@@ -16,10 +16,10 @@ const Home = () => {
         navigate("/");
     }
     const handlePlanTrip = () => {
-         isLoggedIn ? navigate('/tripplaner') : navigate('/SignIn') 
+        isLoggedIn ? navigate('/tripplaner') : navigate('/SignIn')
     }
-    const handleFindBuddy =()=>{
-         isLoggedIn ? navigate('/findabuddy') : navigate('/SignIn') 
+    const handleFindBuddy = () => {
+        isLoggedIn ? navigate('/findabuddy') : navigate('/SignIn')
     }
 
     return (
@@ -135,7 +135,7 @@ const Home = () => {
                         <p className="text-sm text-start">Join a buddy who's going to the same location</p>
                         <div className="flex justify-center">
                             <button onClick={handleFindBuddy}
-                            className="mt-3 bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer">
+                                className="mt-3 bg-gradient-to-r from-blue-400 to-blue-600 px-4 py-2 rounded-full text-white shadow-lg hover:from-blue-500 hover:to-blue-700 transition-transform cursor-pointer">
                                 Find a Buddy
                             </button>
                         </div>
@@ -151,6 +151,17 @@ const Home = () => {
                     type="text"
                     placeholder="Find your destination"
                     className="w-full md:w-2/3 p-3 border-2 border-white rounded-full text-white shadow-2xl placeholder:text-white bg-white/30 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200"
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            if (isLoggedIn) {
+                                navigate('/findabuddy');
+                            } else {
+                                navigate('/signin');
+                            }
+                        }
+                    }}
                 />
 
 
@@ -171,16 +182,16 @@ const Home = () => {
                             <h3 className="font-semibold">Destination Guidelines</h3>
                         </div>
                         <div className="flex flex-col gap-2 mt-2">
-                            <span 
-                            onClick={()=>navigate('/findabuddy')}
-                            className="flex items-center justify-between text-sm cursor-pointer hover:text-blue-600 group">
+                            <span
+                                onClick={() => navigate('/findabuddy')}
+                                className="flex items-center justify-between text-sm cursor-pointer hover:text-blue-600 group">
                                 Popular Travel Destination
                                 <span className="text-lg group-hover:translate-x-1 transition-transform">&gt;</span>
                             </span>
                             <span className="w-full bg-black/30 h-[1px]"></span>
-                            <span 
-                            onClick={()=>navigate('/About')}
-                            className="flex items-center justify-between text-sm cursor-pointer hover:text-blue-600 group">
+                            <span
+                                onClick={() => navigate('/About')}
+                                className="flex items-center justify-between text-sm cursor-pointer hover:text-blue-600 group">
                                 See Travel Reviews
                                 <span className="text-lg group-hover:translate-x-1 transition-transform">&gt;</span>
                             </span>

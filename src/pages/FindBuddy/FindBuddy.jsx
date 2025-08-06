@@ -36,8 +36,7 @@ const PopupContent = ({ username }) => {
 
 
 const FindBuddy = () => {
-  const [destination, setDestination] = useState('');
-  const { userDetails, searchHistory, setSearchHistory } = useContext(UserContext);
+  const { userDetails, searchHistory, setSearchHistory,destination, setDestination } = useContext(UserContext);
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [markedDestinations, setMarkedDestinations] = useState([]);
